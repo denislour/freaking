@@ -1,33 +1,43 @@
 import shutil
+import sys
 
 from typing import List
 from pathlib import Path
+from markdown import markdown
+
+from core.static import Static
 
 
 class Parser:
     extensions: List[str] = list()
 
-    def valid_extensions(self, extension: str):
+    def valid_extensions(self, extension: str) -> bool:
         return extension in self.extensions
 
-    def parse(self, path: Path, source: Path, dest: Path):
+    def parse(self, path: Path, dest: Path) -> None:
         raise NotImplementedError
 
-    def read(self, path: Path):
+    def read(self, path: Path) -> str:
         with open(path, "r") as file:
             return file.read()
 
-    def write(self, path: Path, dest: Path, content: bytes, ext=".html"):
+    def write(self, path: Path, dest: Path, content: str, ext=".html") -> None:
         full_path = dest / path.with_suffix(ext).name
         with open(full_path, "w") as file:
             file.write(content)
 
-    def copy(self, path: Path, source: Path, dest: Path):
+    def copy(self, path: Path, source: Path, dest: Path) -> None:
         shutil.copy(path, dest / path.relative_to(source))
 
 
-class ResourceParser(Parser):
-    extensions = [".jpg", ".png", ".gif", ".css", ".html"]
+class MarkdownParser(Parser):
+    extensions = [".md", ".markdown"]
 
-    def parse(self, path: Path, source: Path, dest: Path):
-        self.copy(path=path, source=source, dest=dest)
+    def parse(self, path: Path, dest: Path) -> None:
+        content = Static.generate(self.read(path))
+        html_content = markdown(content.body)
+        self.write(dest, html_content)
+        sys.stdout.write(
+             "\x1b[1;32m{} converted to HTML. "
+             "Metadata: {}\n".format(path.name, content)
+         )

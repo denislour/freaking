@@ -1,13 +1,13 @@
 import typer
 from core.freaking import Freaking
-from core.parser import ResourceParser
+from core.parser import MarkdownParser
 
 
 def main(source: str = "content", dest: str = "dest"):
     config: dict = {
         "source": source,
         "dest": dest,
-        "parsers": [ResourceParser()],
+        "parsers": [MarkdownParser()],
     }
     Freaking(**config).build()
 

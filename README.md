@@ -10,3 +10,11 @@ For installation instructions head to the official documentation:
 
 - [Installation](https://media.giphy.com/media/gfZDFckDJhoqgJWGYv/giphy.gif)
 - [Quickstart](https://media.giphy.com/media/gfZDFckDJhoqgJWGYv/giphy.gif)
+
+## Todo
+
+- Check issue from the line below:
+
+  > `metadata = load(fm, Loader=FullLoader)`
+
+  Cannot load parser when using `yaml` library

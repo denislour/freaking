@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import List
-from freaking.parser import ResourceParser
+from core.parser import ResourceParser
 
 
 class Freaking:

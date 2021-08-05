@@ -1,3 +1,6 @@
+import sys
+
+from os import stat
 from pathlib import Path
 from typing import List
 from core.parser import ResourceParser
@@ -9,6 +12,10 @@ class Freaking:
         self.source = Path(source)
         self.dest = Path(dest)
         self.parsers = parsers
+
+    @staticmethod
+    def error(msg):
+        sys.stderr.write("\x1b[1;31m{}\n".format(msg))
 
     def create_dir(self, path: Path):
         """Create directory from path"""
@@ -25,7 +32,10 @@ class Freaking:
         if parser:
             parser.parse(path, self.source, self.dest)
         else:
-            print("Not Implemented")
+            self.error(
+                "No parser for the {} file, "
+                "Not allow {} extension!".format(path.name, path.suffix)
+            )
 
     def build(self):
         self.dest.mkdir(parents=True, exist_ok=True)

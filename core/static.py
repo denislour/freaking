@@ -13,7 +13,7 @@ class Static(Mapping):
 
     @classmethod
     def generate(cls, raw_content):
-        fm, content = cls.__regex.split(raw_content, 2)
+        _, fm, content = cls.__regex.split(raw_content, 2)
         metadata = load(fm, Loader=FullLoader)
         return cls(metadata, content)
 

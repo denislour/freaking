@@ -34,9 +34,14 @@ class MarkdownParser(Parser):
     extensions = [".md", ".markdown"]
 
     def parse(self, path: Path, dest: Path) -> None:
-        content = Static.generate(self.read(path))
+        try:
+            content = Static.generate(self.read(path))
+        except ValueError:
+            sys.stderr.write(
+                "Cannot parse markdown content {}!".format(path.name))
+            return None
         html_content = markdown(content.body)
-        self.write(dest, html_content)
+        self.write(path, dest, html_content)
         sys.stdout.write(
              "\x1b[1;32m{} converted to HTML. "
              "Metadata: {}\n".format(path.name, content)
